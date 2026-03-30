@@ -32,7 +32,7 @@ export default function WhyChooseUs() {
     >
       <div
         style={{
-          maxWidth: "1200px",
+          maxWidth: "1050px",
           margin: "0 auto",
           textAlign: "center",
         }}
