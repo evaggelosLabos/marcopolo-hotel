@@ -98,21 +98,26 @@ export default function Hero() {
             </p>
 
             <button
-              style={{
-                marginTop: "30px",
-                padding: "14px 30px",
-                background: "linear-gradient(135deg, #f8df9a, #d8ad57)",
-                border: "none",
-                color: "#111827",
-                borderRadius: "999px",
-                cursor: "pointer",
-                fontWeight: 800,
-                fontSize: "15px",
-                boxShadow: "0 8px 24px rgba(216,173,87,0.35)",
-              }}
-            >
-              Check Availability
-            </button>
+  onClick={() => {
+    window.open(
+      "https://www.booking.com/searchresults.el.html?ss=Marco+Polo+Hotel%2C+Gouvia%2C+Ionian+Islands+%28Corfu%29%2C+Greece&efdco=1&label=gog235jc-10CAEoggI46AdIM1gDaFyIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Atzi6s4GwAIB0gIkM2M1NTBkYjItN2ZjMy00NTM2LTlkMDctNGMxOGZlOWQyMDEx2AIB4AIB&sid=cabe4ff012203b0b68c99c4adfc71116&aid=397594&lang=el&sb=1&src_elem=sb&src=index&dest_id=9990606&dest_type=hotel&ac_position=2&ac_click_type=b&ac_langcode=xu&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=25ef8a44ca7b0041&ac_meta=GhAyNWVmOGE0NGNhN2IwMDQxIAIoATICeHU6Ek1hcmNvIFBvbG8gSG90ZWwgYw%3D%3D&ltfd=1%3A1%3A5-2026%3A1%3A1&group_adults=2&no_rooms=1&group_children=0",
+      "_blank"
+    );
+  }}
+  style={{
+    padding: "14px 28px",
+    background: "linear-gradient(135deg, #f8df9a, #d8ad57)",
+    border: "none",
+    color: "#111827",
+    borderRadius: "999px",
+    cursor: "pointer",
+    fontWeight: 850,
+    fontSize: "15px",
+    boxShadow: "0 10px 24px rgba(216,173,87,0.35)",
+  }}
+>
+  Check Availability
+</button>
           </div>
         </>
       ) : (
@@ -230,22 +235,26 @@ export default function Hero() {
   </p>
 
   <button
-    style={{
-      width: "100%",
-      maxWidth: "320px",
-      padding: "15px 28px",
-      background: "linear-gradient(135deg, #f8df9a, #d8ad57)",
-      border: "none",
-      color: "#111827",
-      borderRadius: "999px",
-      cursor: "pointer",
-      fontWeight: 850,
-      fontSize: "15px",
-      boxShadow: "0 10px 24px rgba(216,173,87,0.35)",
-    }}
-  >
-    Check Availability
-  </button>
+  onClick={() => {
+    window.open(
+      "https://www.booking.com/searchresults.el.html?ss=Marco+Polo+Hotel%2C+Gouvia%2C+Ionian+Islands+%28Corfu%29%2C+Greece&efdco=1&label=gog235jc-10CAEoggI46AdIM1gDaFyIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Atzi6s4GwAIB0gIkM2M1NTBkYjItN2ZjMy00NTM2LTlkMDctNGMxOGZlOWQyMDEx2AIB4AIB&sid=cabe4ff012203b0b68c99c4adfc71116&aid=397594&lang=el&sb=1&src_elem=sb&src=index&dest_id=9990606&dest_type=hotel&ac_position=2&ac_click_type=b&ac_langcode=xu&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=25ef8a44ca7b0041&ac_meta=GhAyNWVmOGE0NGNhN2IwMDQxIAIoATICeHU6Ek1hcmNvIFBvbG8gSG90ZWwgYw%3D%3D&ltfd=1%3A1%3A5-2026%3A1%3A1&group_adults=2&no_rooms=1&group_children=0",
+      "_blank"
+    );
+  }}
+  style={{
+    padding: "14px 28px",
+    background: "linear-gradient(135deg, #f8df9a, #d8ad57)",
+    border: "none",
+    color: "#111827",
+    borderRadius: "999px",
+    cursor: "pointer",
+    fontWeight: 850,
+    fontSize: "15px",
+    boxShadow: "0 10px 24px rgba(216,173,87,0.35)",
+  }}
+>
+  Check Availability
+</button>
 </div>
 
       )}
