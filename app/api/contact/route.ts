@@ -45,12 +45,16 @@ export async function POST(req: Request) {
           name: "Marco Polo Website",
           email: "noreply@marcopolocorfu.com",
         },
-        to: [
-          {
-            email: "vagjelis.8@gmail.com",
-            name: "Marco Polo Hotel",
-          },
-        ],
+         to: [
+  {
+    email: "vagjelis.8@gmail.com",
+    name: "Marco Polo Hotel",
+  },
+  {
+    email: "office@marcopolohotel.com",
+    name: "Marco Polo Office",
+  },
+],
         replyTo: {
           email,
           name,
