@@ -270,7 +270,7 @@ export default function ContactPage() {
                 <p>
                   <strong style={{ color: "#1f4e5f" }}>Email:</strong>
                   <br />
-                  office@marcopolohotel.com
+                  office@marcopolocorfu.com
                 </p>
               </div>
             </div>
