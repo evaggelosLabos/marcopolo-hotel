@@ -112,7 +112,7 @@ export default function Footer() {
           >
             <span>Corfu, Greece</span>
             <span>+30  693 904 1035</span>
-            <span>office@marcopolohotel.com</span>
+            <span>office@marcopolocorfu.com</span>
           </div>
         </div>
 
