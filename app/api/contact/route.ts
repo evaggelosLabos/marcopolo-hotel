@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     name: "Marco Polo Hotel",
   },
   {
-    email: "office@marcopolohotel.com",
+    email: "office@marcopolocorfu.com",
     name: "Marco Polo Office",
   },
 ],
