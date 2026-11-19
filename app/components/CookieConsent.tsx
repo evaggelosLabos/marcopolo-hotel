@@ -7,11 +7,13 @@ export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    const savedConsent = localStorage.getItem("marcopolo_cookie_consent");
-
-    if (!savedConsent) {
-      setShowBanner(true);
-    }
+    const id = window.setTimeout(() => {
+      const savedConsent = localStorage.getItem("marcopolo_cookie_consent");
+      if (!savedConsent) {
+        setShowBanner(true);
+      }
+    }, 0);
+    return () => window.clearTimeout(id);
   }, []);
 
   const acceptCookies = () => {
@@ -31,69 +33,48 @@ export default function CookieConsent() {
       style={{
         position: "fixed",
         left: "50%",
-        bottom: "18px",
+        bottom: "82px",
         transform: "translateX(-50%)",
         width: "calc(100% - 28px)",
-        maxWidth: "980px",
-        zIndex: 9999,
-        background: "rgba(12, 18, 26, 0.96)",
-        color: "#fff",
-        border: "1px solid rgba(255,255,255,0.14)",
+        maxWidth: "820px",
+        zIndex: 4400,
+        background: "rgba(36, 33, 31, 0.96)",
+        color: "var(--ivory)",
+        border: "1px solid var(--sand-dim)",
         borderRadius: "22px",
-        boxShadow: "0 18px 50px rgba(0,0,0,0.35)",
-        padding: "18px",
-        boxSizing: "border-box",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
+        boxShadow: "0 20px 52px rgba(0,0,0,0.45)",
+        padding: "18px 22px",
+        backdropFilter: "blur(18px)",
+        WebkitBackdropFilter: "blur(18px)",
       }}
     >
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          gap: "14px",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "16px",
         }}
       >
-        <div>
-          <p
-            style={{
-              margin: "0 0 8px",
-              color: "#f4d38a",
-              fontSize: "13px",
-              fontWeight: 800,
-              letterSpacing: "1.2px",
-              textTransform: "uppercase",
-            }}
-          >
+        <div style={{ flex: "1 1 360px" }}>
+          <div className="eyebrow" style={{ marginBottom: "6px" }}>
             Cookie Preferences
-          </p>
-
-          <h3
-            style={{
-              margin: "0 0 8px",
-              fontSize: "20px",
-              lineHeight: 1.2,
-            }}
-          >
-            We use cookies to improve your experience
-          </h3>
-
+          </div>
           <p
             style={{
               margin: 0,
-              fontSize: "14px",
+              fontSize: "13.5px",
               lineHeight: 1.6,
-              color: "rgba(255,255,255,0.82)",
+              color: "var(--sand)",
             }}
           >
-            We use essential cookies to make the website work and optional
-            cookies to understand how visitors use our website. You can accept
-            or reject optional cookies. Read our{" "}
+            We use essential cookies to keep the website running and optional
+            analytics cookies to improve your experience. Read our{" "}
             <Link
               href="/cookies"
               style={{
-                color: "#f4d38a",
-                fontWeight: 700,
+                color: "var(--ivory)",
                 textDecoration: "underline",
               }}
             >
@@ -103,8 +84,7 @@ export default function CookieConsent() {
             <Link
               href="/privacy"
               style={{
-                color: "#f4d38a",
-                fontWeight: 700,
+                color: "var(--ivory)",
                 textDecoration: "underline",
               }}
             >
@@ -114,41 +94,19 @@ export default function CookieConsent() {
           </p>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-            flexWrap: "wrap",
-            justifyContent: "flex-end",
-          }}
-        >
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <button
+            type="button"
             onClick={rejectCookies}
-            style={{
-              padding: "12px 18px",
-              borderRadius: "999px",
-              border: "1px solid rgba(255,255,255,0.22)",
-              background: "transparent",
-              color: "#fff",
-              fontWeight: 800,
-              cursor: "pointer",
-            }}
+            className="cap-pill-ghost"
           >
             Reject
           </button>
-
           <button
+            type="button"
             onClick={acceptCookies}
-            style={{
-              padding: "12px 20px",
-              borderRadius: "999px",
-              border: "none",
-              background: "linear-gradient(135deg, #f8df9a, #d8ad57)",
-              color: "#111827",
-              fontWeight: 900,
-              cursor: "pointer",
-              boxShadow: "0 10px 24px rgba(216,173,87,0.28)",
-            }}
+            className="cap-pill"
+            style={{ padding: "8px 18px" }}
           >
             Accept Cookies
           </button>

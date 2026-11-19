@@ -1,194 +1,191 @@
+import Link from "next/link";
+import { CONTACT_INFO } from "../data/hotel";
+
+export const metadata = {
+  title: "Location | Marcopolo Hotel® Corfu",
+  description:
+    "Located in Gouvia, Corfu — 5 minutes from Gouvia Beach, 10 minutes to Corfu Town, and 15 minutes from Corfu Airport.",
+};
+
 export default function LocationPage() {
   return (
-    <div
-      style={{
-        width: "100%",
-        backgroundColor: "#f8fafc",
-        paddingTop: "110px",
-        paddingBottom: "70px",
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        boxSizing: "border-box",
-      }}
-    >
+    <div className="cap-subpage">
       <div
         style={{
-          maxWidth: "1200px",
+          maxWidth: "1260px",
           margin: "0 auto",
           display: "flex",
           flexDirection: "column",
           gap: "32px",
         }}
       >
-        {/* HEADER */}
         <div
           style={{
             textAlign: "center",
-            maxWidth: "760px",
+            maxWidth: "780px",
             margin: "0 auto",
           }}
         >
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "clamp(32px, 5vw, 48px)",
-              fontWeight: 800,
-              color: "#1f4e5f",
-              lineHeight: 1.2,
-            }}
-          >
-            Location
+          <div className="eyebrow" style={{ marginBottom: "12px" }}>
+            {CONTACT_INFO.coordinates}
+          </div>
+          <h1 className="display-lg" style={{ margin: "0 0 14px 0" }}>
+            Closer Than You Think
           </h1>
-
           <p
             style={{
-              marginTop: "16px",
-              marginBottom: 0,
-              fontSize: "17px",
-              lineHeight: "1.8",
-              color: "#475569",
+              margin: 0,
+              fontSize: "16px",
+              lineHeight: 1.7,
+              color: "var(--sand)",
             }}
           >
             Stay in Gouvia, Corfu, just minutes from the beach and close to
-            everything you need for a relaxing and enjoyable holiday.
+            everything you need for a relaxing and enjoyable island holiday.
           </p>
         </div>
 
-        {/* MAIN GRID */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))",
             gap: "24px",
           }}
         >
-          {/* INFO CARD */}
           <div
-            style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "20px",
-              padding: "28px",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
-              border: "1px solid rgba(0,0,0,0.05)",
-            }}
+            className="cap-card"
+            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
-            <h2
-              style={{
-                marginTop: 0,
-                marginBottom: "18px",
-                fontSize: "26px",
-                fontWeight: 700,
-                color: "#1f2937",
-              }}
-            >
-              Where We Are
-            </h2>
+            <div>
+              <div className="eyebrow" style={{ marginBottom: "8px" }}>
+                Where We Are
+              </div>
+              <h2 className="display-md" style={{ margin: "0 0 12px 0" }}>
+                Gouvia, Corfu
+              </h2>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "15px",
+                  lineHeight: 1.75,
+                  color: "var(--sand)",
+                }}
+              >
+                Marcopolo Hotel is located in Gouvia, Corfu, just a short walk
+                from the beach and close to restaurants, shops, and local
+                attractions. It offers a convenient and peaceful base for
+                exploring the entire island.
+              </p>
+            </div>
 
-            <p
+            <div
               style={{
-                marginTop: 0,
-                marginBottom: "18px",
-                fontSize: "16px",
-                lineHeight: "1.8",
-                color: "#475569",
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "10px",
               }}
             >
-              Marcopolo Hotel is located in Gouvia, Corfu, just a short walk from
-              the beach and close to restaurants, shops, and local attractions.
-              It offers a convenient and comfortable base for exploring the
-              island.
-            </p>
+              {[
+                ["5 min", "Gouvia Beach"],
+                ["10 min", "Corfu Town"],
+                ["15 min", "Corfu Airport"],
+              ].map(([t, label]) => (
+                <div
+                  key={label}
+                  style={{
+                    background: "var(--bg-base)",
+                    border: "1px solid var(--sand-dim)",
+                    borderRadius: "16px",
+                    padding: "14px",
+                  }}
+                >
+                  <div style={{ fontSize: "20px", fontWeight: 600 }}>{t}</div>
+                  <div style={{ fontSize: "12px", color: "var(--sand)" }}>
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </div>
 
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "14px",
-                fontSize: "15px",
-                color: "#475569",
-                lineHeight: "1.7",
+                gap: "10px",
+                fontSize: "14.5px",
+                color: "var(--sand)",
+                borderTop: "1px solid var(--sand-dim)",
+                paddingTop: "16px",
               }}
             >
               <div>
-                <strong style={{ color: "#1f4e5f" }}>Address:</strong>
-                <div>Gouvia, Corfu 49100, Greece</div>
+                <strong style={{ color: "var(--ivory)" }}>Address:</strong>{" "}
+                {CONTACT_INFO.address}
               </div>
-
               <div>
-                <strong style={{ color: "#1f4e5f" }}>Ideal For:</strong>
-                <div>Couples, families & holiday travelers</div>
+                <strong style={{ color: "var(--ivory)" }}>Ideal For:</strong>{" "}
+                Couples, families &amp; island explorers
               </div>
             </div>
 
-            {/* DISTANCES */}
-            <div style={{ marginTop: "18px" }}>
-              <strong style={{ color: "#1f4e5f" }}>Distances:</strong>
-
-              <ul
-                style={{
-                  marginTop: "10px",
-                  paddingLeft: "18px",
-                  color: "#475569",
-                  lineHeight: "1.8",
-                  fontSize: "15px",
-                }}
-              >
-                <li>5 min walk to Gouvia Beach</li>
-                <li>10 min drive to Corfu Town</li>
-                <li>15 min from Corfu Airport</li>
-                <li>Close to restaurants, bars & shops</li>
-              </ul>
+            <div style={{ marginTop: "auto" }}>
+              <Link href="/contact" className="cap-pill">
+                <span>Contact Reception</span>
+                <span className="cap-circle">↗</span>
+              </Link>
             </div>
           </div>
 
-          {/* MAP CARD */}
           <div
+            className="cap-card"
             style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "20px",
               padding: "18px",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
-              border: "1px solid rgba(0,0,0,0.05)",
-              minHeight: "420px",
+              minHeight: "430px",
               display: "flex",
               flexDirection: "column",
+              gap: "14px",
             }}
           >
-            <h2
+            <div
               style={{
-                margin: "10px 10px 16px 10px",
-                fontSize: "24px",
-                fontWeight: 700,
-                color: "#1f2937",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "4px 6px",
               }}
             >
-              Find Us on the Map
-            </h2>
-
+              <span className="eyebrow">Interactive Map</span>
+              <span style={{ fontSize: "12.5px", color: "var(--sand)" }}>
+                Gouvia, Corfu 49100
+              </span>
+            </div>
             <div
               style={{
                 flex: 1,
-                borderRadius: "16px",
+                borderRadius: "20px",
                 overflow: "hidden",
-                minHeight: "320px",
+                minHeight: "340px",
+                border: "1px solid var(--sand-dim)",
               }}
             >
               <iframe
                 title="Marcopolo Hotel Location"
-                src="https://www.google.com/maps?q=39.6505938,19.8442759&z=17&output=embed"
+                src={CONTACT_INFO.mapEmbedUrl}
                 width="100%"
                 height="100%"
                 style={{
                   border: 0,
-                  minHeight: "320px",
+                  minHeight: "340px",
+                  display: "block",
+                  filter: "grayscale(0.25) contrast(1.04)",
                 }}
                 loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
           </div>
         </div>
 
-        {/* EXTRA INFO CARDS */}
         <div
           style={{
             display: "grid",
@@ -196,107 +193,42 @@ export default function LocationPage() {
             gap: "20px",
           }}
         >
-          <div
-            style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "18px",
-              padding: "24px",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.05)",
-              border: "1px solid rgba(0,0,0,0.05)",
-            }}
-          >
-            <h3
-              style={{
-                marginTop: 0,
-                marginBottom: "12px",
-                fontSize: "20px",
-                fontWeight: 700,
-                color: "#1f4e5f",
-              }}
-            >
-              Nearby Attractions
-            </h3>
-
-            <p
-              style={{
-                margin: 0,
-                fontSize: "15px",
-                lineHeight: "1.8",
-                color: "#475569",
-              }}
-            >
-              Enjoy nearby beaches, cafés, restaurants, and local attractions
-              just minutes from the hotel.
-            </p>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "18px",
-              padding: "24px",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.05)",
-              border: "1px solid rgba(0,0,0,0.05)",
-            }}
-          >
-            <h3
-              style={{
-                marginTop: 0,
-                marginBottom: "12px",
-                fontSize: "20px",
-                fontWeight: 700,
-                color: "#1f4e5f",
-              }}
-            >
-              Easy to Reach
-            </h3>
-
-            <p
-              style={{
-                margin: 0,
-                fontSize: "15px",
-                lineHeight: "1.8",
-                color: "#475569",
-              }}
-            >
-              Conveniently located for arrivals from the airport and easy access
-              to Corfu Town and surrounding areas.
-            </p>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "18px",
-              padding: "24px",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.05)",
-              border: "1px solid rgba(0,0,0,0.05)",
-            }}
-          >
-            <h3
-              style={{
-                marginTop: 0,
-                marginBottom: "12px",
-                fontSize: "20px",
-                fontWeight: 700,
-                color: "#1f4e5f",
-              }}
-            >
-              Great Holiday Base
-            </h3>
-
-            <p
-              style={{
-                margin: 0,
-                fontSize: "15px",
-                lineHeight: "1.8",
-                color: "#475569",
-              }}
-            >
-              A perfect starting point for exploring Corfu while enjoying a
-              comfortable and affordable stay.
-            </p>
-          </div>
+          {[
+            [
+              "Nearby Attractions",
+              "Enjoy nearby beaches, seaside tavernas, Gouvia Marina, cafés, and shops just minutes on foot from the hotel.",
+            ],
+            [
+              "Easy to Reach",
+              "Conveniently positioned for effortless arrivals from Corfu Airport and quick access to Corfu Old Town.",
+            ],
+            [
+              "Great Island Base",
+              "A calm, practical starting point for northern coves, Paleokastritsa, and Ionian day trips.",
+            ],
+          ].map(([title, body]) => (
+            <div key={title} className="cap-card">
+              <h3
+                style={{
+                  margin: "0 0 10px 0",
+                  fontSize: "20px",
+                  fontWeight: 500,
+                }}
+              >
+                {title}
+              </h3>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14.5px",
+                  lineHeight: 1.7,
+                  color: "var(--sand)",
+                }}
+              >
+                {body}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

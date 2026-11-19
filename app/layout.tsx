@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { CapsulesProvider } from "./components/CapsulesContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import CookieConsent from "./components/CookieConsent";
@@ -17,8 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Marcopolo Hotel",
-  description: "Luxury hotel stay in Corfu",
+  title: "Marcopolo Hotel® — Gouvia, Corfu",
+  description:
+    "Sunlit accommodation in Gouvia, Corfu — minutes from Gouvia Beach, surrounded by Mediterranean greenery, an outdoor pool courtyard, and authentic island hospitality.",
 };
 
 export default function RootLayout({
@@ -29,20 +31,24 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
       <body
-        className="min-h-full flex flex-col"
         style={{
           margin: 0,
           padding: 0,
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <Header />
-        <main style={{ flex: 1 }}>{children}</main>
-        <Footer />
-        <CookieConsent />
-         <GoogleAnalytics />
+        <CapsulesProvider>
+          <Header />
+          <main style={{ flex: 1 }}>{children}</main>
+          <Footer />
+          <CookieConsent />
+          <GoogleAnalytics />
+        </CapsulesProvider>
       </body>
     </html>
   );

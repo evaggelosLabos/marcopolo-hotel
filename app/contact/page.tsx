@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CONTACT_INFO } from "../data/hotel";
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -8,12 +9,15 @@ export default function ContactPage() {
     email: "",
     phone: "",
     message: "",
-    website: "", // honeypot
-    startedAt: Date.now(), // time protection
+    website: "",
+    startedAt: Date.now(),
   });
 
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<{
+    type: "ok" | "err";
+    text: string;
+  } | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -24,14 +28,12 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setStatus("");
+    setStatus(null);
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
@@ -41,7 +43,10 @@ export default function ContactPage() {
         throw new Error(data.error || "Something went wrong");
       }
 
-      setStatus("Message sent successfully.");
+      setStatus({
+        type: "ok",
+        text: "Message sent successfully. We will reply shortly.",
+      });
       setForm({
         name: "",
         email: "",
@@ -50,85 +55,59 @@ export default function ContactPage() {
         website: "",
         startedAt: Date.now(),
       });
-    } catch (error) {
-      setStatus("Message failed. Please try again.");
+    } catch {
+      setStatus({
+        type: "err",
+        text: "Message failed. Please try again or call reception directly.",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        backgroundColor: "#f8fafc",
-        paddingTop: "110px",
-        paddingBottom: "70px",
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        boxSizing: "border-box",
-      }}
-    >
+    <div className="cap-subpage">
       <div
         style={{
-          maxWidth: "1200px",
+          maxWidth: "1240px",
           margin: "0 auto",
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          gap: "32px",
         }}
       >
-        <div style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto" }}>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "clamp(32px, 5vw, 48px)",
-              fontWeight: 800,
-              color: "#1f4e5f",
-              lineHeight: 1.2,
-            }}
-          >
-            Contact Marcopolo Hotel
+        <div style={{ maxWidth: "760px" }}>
+          <div className="eyebrow" style={{ marginBottom: "12px" }}>
+            Direct Reception • Gouvia, Corfu
+          </div>
+          <h1 className="display-lg" style={{ margin: "0 0 14px 0" }}>
+            Contact Marcopolo
+            <sup style={{ fontSize: "0.45em", color: "var(--sand)" }}>®</sup>
           </h1>
-
           <p
             style={{
-              marginTop: "16px",
-              marginBottom: 0,
-              fontSize: "17px",
-              lineHeight: "1.8",
-              color: "#475569",
+              margin: 0,
+              fontSize: "16px",
+              lineHeight: 1.7,
+              color: "var(--sand)",
             }}
           >
-            We are here to help you with your stay in Corfu. Contact us for
-            availability, room information, or any questions before your trip.
+            We are here to help with availability, room options, arrivals, or
+            any questions before your Corfu holiday.
           </p>
         </div>
 
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))",
             gap: "24px",
           }}
         >
-          <div
-            style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "20px",
-              padding: "28px",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
-              border: "1px solid rgba(0,0,0,0.05)",
-            }}
-          >
+          <div className="cap-card">
             <h2
-              style={{
-                marginTop: 0,
-                marginBottom: "20px",
-                fontSize: "26px",
-                fontWeight: 700,
-                color: "#1f2937",
-              }}
+              className="display-md"
+              style={{ margin: "0 0 20px 0", fontSize: "1.85rem" }}
             >
               Send Us a Message
             </h2>
@@ -138,7 +117,7 @@ export default function ContactPage() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "16px",
+                gap: "14px",
                 position: "relative",
               }}
             >
@@ -150,7 +129,7 @@ export default function ContactPage() {
                 placeholder="Full Name"
                 required
                 maxLength={100}
-                style={inputStyle}
+                className="cap-field"
               />
 
               <input
@@ -161,7 +140,7 @@ export default function ContactPage() {
                 placeholder="Email Address"
                 required
                 maxLength={150}
-                style={inputStyle}
+                className="cap-field"
               />
 
               <input
@@ -169,9 +148,9 @@ export default function ContactPage() {
                 value={form.phone}
                 onChange={handleChange}
                 type="tel"
-                placeholder="Phone Number"
+                placeholder="Phone Number (optional)"
                 maxLength={50}
-                style={inputStyle}
+                className="cap-field"
               />
 
               <textarea
@@ -182,14 +161,11 @@ export default function ContactPage() {
                 rows={6}
                 required
                 maxLength={3000}
-                style={{
-                  ...inputStyle,
-                  resize: "vertical",
-                  fontFamily: "inherit",
-                }}
+                className="cap-field"
+                style={{ resize: "vertical", fontFamily: "inherit" }}
               />
 
-              {/* Honeypot field - real users will not see this */}
+              {/* Honeypot anti-bot field */}
               <input
                 name="website"
                 value={form.website}
@@ -211,101 +187,129 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={loading}
+                className="cap-pill"
                 style={{
-                  backgroundColor: "#f4b942",
-                  color: "#1f2937",
-                  border: "none",
-                  borderRadius: "999px",
-                  padding: "14px 22px",
-                  fontSize: "15px",
-                  fontWeight: 800,
-                  cursor: loading ? "not-allowed" : "pointer",
                   alignSelf: "flex-start",
-                  boxShadow: "0 6px 18px rgba(244,185,66,0.28)",
                   opacity: loading ? 0.7 : 1,
+                  cursor: loading ? "not-allowed" : "pointer",
                 }}
               >
-                {loading ? "SENDING..." : "SEND MESSAGE"}
+                <span>{loading ? "Sending..." : "Send Message"}</span>
+                <span className="cap-circle">↗</span>
               </button>
 
               {status && (
                 <p
                   style={{
-                    margin: 0,
-                    color: status.includes("successfully") ? "#166534" : "#b91c1c",
-                    fontWeight: 700,
+                    margin: "4px 0 0",
+                    padding: "12px 14px",
+                    borderRadius: "14px",
+                    background:
+                      status.type === "ok"
+                        ? "rgba(177,166,150,0.16)"
+                        : "rgba(220,38,38,0.18)",
+                    border: `1px solid ${
+                      status.type === "ok"
+                        ? "var(--sand-dim)"
+                        : "rgba(248,113,113,0.4)"
+                    }`,
+                    color: "var(--ivory)",
+                    fontSize: "14px",
                   }}
                 >
-                  {status}
+                  {status.text}
                 </p>
               )}
             </form>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-            <div
-              style={{
-                backgroundColor: "#ffffff",
-                borderRadius: "20px",
-                padding: "28px",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
-                border: "1px solid rgba(0,0,0,0.05)",
-              }}
-            >
-              <h2 style={{ marginTop: 0, fontSize: "24px", color: "#1f2937" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div className="cap-card">
+              <div className="eyebrow" style={{ marginBottom: "10px" }}>
                 Contact Information
-              </h2>
-
-              <div style={{ fontSize: "16px", color: "#475569", lineHeight: "1.7" }}>
-                <p>
-                  <strong style={{ color: "#1f4e5f" }}>Address:</strong>
-                  <br />
-                  Corfu, Greece
-                </p>
-                <p>
-                  <strong style={{ color: "#1f4e5f" }}>Phone:</strong>
-                  <br />
-                  +30 693 904 1035
-                </p>
-                <p>
-                  <strong style={{ color: "#1f4e5f" }}>Email:</strong>
-                  <br />
-                  office@marcopolocorfu.com
-                </p>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                  fontSize: "15.5px",
+                  color: "var(--sand)",
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: "12px", color: "var(--sand-muted)" }}>
+                    Address
+                  </div>
+                  <div style={{ color: "var(--ivory)", marginTop: "3px" }}>
+                    {CONTACT_INFO.address}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: "12px", color: "var(--sand-muted)" }}>
+                    Phone
+                  </div>
+                  <a
+                    href={CONTACT_INFO.phoneHref}
+                    style={{
+                      color: "var(--ivory)",
+                      textDecoration: "none",
+                      display: "inline-block",
+                      marginTop: "3px",
+                    }}
+                  >
+                    {CONTACT_INFO.phone}
+                  </a>
+                </div>
+                <div>
+                  <div style={{ fontSize: "12px", color: "var(--sand-muted)" }}>
+                    Email
+                  </div>
+                  <a
+                    href={CONTACT_INFO.emailHref}
+                    style={{
+                      color: "var(--ivory)",
+                      textDecoration: "none",
+                      display: "inline-block",
+                      marginTop: "3px",
+                    }}
+                  >
+                    {CONTACT_INFO.email}
+                  </a>
+                </div>
               </div>
             </div>
 
             <div
+              className="cap-card"
               style={{
-                backgroundColor: "#1f4e5f",
-                borderRadius: "20px",
-                padding: "28px",
-                color: "#ffffff",
+                background: "#2E2A27",
+                display: "flex",
+                flexDirection: "column",
+                gap: "14px",
               }}
             >
-              <h3 style={{ marginTop: 0, fontSize: "24px" }}>
+              <div className="eyebrow">Quick Assistance</div>
+              <h3 style={{ margin: 0, fontSize: "24px", fontWeight: 500 }}>
                 Need a quick answer?
               </h3>
-
-              <p style={{ lineHeight: "1.8", color: "rgba(255,255,255,0.88)" }}>
-                Contact us directly for booking questions, room details, and
-                general hotel information.
-              </p>
-
-              <a
-                href="tel:+306939041035"
+              <p
                 style={{
-                  display: "inline-block",
-                  textDecoration: "none",
-                  backgroundColor: "#f4b942",
-                  color: "#1f2937",
-                  padding: "13px 18px",
-                  borderRadius: "999px",
-                  fontWeight: 800,
+                  margin: 0,
+                  lineHeight: 1.7,
+                  color: "var(--sand)",
+                  fontSize: "14.5px",
                 }}
               >
-                CALL US
-              </a>
+                Call our reception directly for booking questions, room details,
+                airport transfer tips, and local Corfu guidance.
+              </p>
+              <div style={{ marginTop: "6px" }}>
+                <a href={CONTACT_INFO.phoneHref} className="cap-pill">
+                  <span>Call Reception</span>
+                  <span className="cap-circle">↗</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -313,13 +317,3 @@ export default function ContactPage() {
     </div>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "14px 16px",
-  borderRadius: "12px",
-  border: "1px solid #d1d5db",
-  fontSize: "15px",
-  outline: "none",
-  boxSizing: "border-box",
-};

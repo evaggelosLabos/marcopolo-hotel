@@ -1,13 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import { CONTACT_INFO } from "../data/hotel";
+import { useCapsulesUI } from "./CapsulesContext";
 
 export default function Footer() {
+  const { openReserve } = useCapsulesUI();
+
   return (
     <footer
       style={{
-        backgroundColor: "#1f4e5f",
-        color: "#ffffff",
-        padding: "50px 20px 24px 20px",
-        marginTop: "0",
+        padding: "52px clamp(16px, 4vw, 52px) 112px",
+        borderTop: "1px solid var(--sand-dim)",
+        background: "var(--bg-surface-soft)",
+        color: "var(--ivory)",
       }}
     >
       <div
@@ -15,133 +21,155 @@ export default function Footer() {
           maxWidth: "1300px",
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           gap: "32px",
         }}
       >
         <div>
-          <h3
+          <div
             style={{
-              margin: "0 0 12px 0",
               fontSize: "26px",
-              fontWeight: 800,
-              letterSpacing: "0.5px",
+              fontWeight: 600,
+              letterSpacing: "-0.03em",
+              marginBottom: "12px",
             }}
           >
-            MARCOPOLO
-          </h3>
+            Marcopolo
+            <sup style={{ fontSize: "12px", color: "var(--sand)" }}>®</sup>
+          </div>
           <p
             style={{
               margin: 0,
-              fontSize: "15px",
-              lineHeight: "1.8",
-              color: "rgba(255,255,255,0.82)",
-              maxWidth: "300px",
+              fontSize: "14px",
+              lineHeight: 1.7,
+              color: "var(--sand)",
+              maxWidth: "280px",
             }}
           >
-            Comfortable and affordable accommodation in Corfu, ideal for guests
-            looking for a pleasant stay with easy access to the island.
+            Comfortable and welcoming accommodation in Gouvia, Corfu — just
+            minutes from the beach and local attractions.
           </p>
         </div>
 
         <div>
-          <h4
-            style={{
-              margin: "0 0 14px 0",
-              fontSize: "16px",
-              fontWeight: 700,
-              color: "#f4d38a",
-            }}
-          >
-            Quick Links
-          </h4>
-
+          <div className="eyebrow" style={{ marginBottom: "12px" }}>
+            Explore
+          </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
+              gap: "9px",
+              fontSize: "14.5px",
             }}
           >
-            <Link href="/" style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
+            <Link
+              href="/"
+              style={{ color: "var(--ivory)", textDecoration: "none" }}
+            >
               Home
             </Link>
-            <Link href="/rooms" style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
+            <Link
+              href="/rooms"
+              style={{ color: "var(--sand)", textDecoration: "none" }}
+            >
               Rooms
             </Link>
-            <Link href="/facilities" style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
-              Facilities
+            <Link
+              href="/gallery"
+              style={{ color: "var(--sand)", textDecoration: "none" }}
+            >
+              Gallery
             </Link>
-            <Link href="/location" style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
+            <Link
+              href="/location"
+              style={{ color: "var(--sand)", textDecoration: "none" }}
+            >
               Location
             </Link>
-            <Link href="/contact" style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
+            <Link
+              href="/about"
+              style={{ color: "var(--sand)", textDecoration: "none" }}
+            >
+              About
+            </Link>
+            <Link
+              href="/contact"
+              style={{ color: "var(--sand)", textDecoration: "none" }}
+            >
               Contact
             </Link>
-             <Link href="/cookies" style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
-             Cookie Policy
-            </Link>
-            <Link href="/privacy" style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
-             Privacy Policy
-            </Link>
-           
           </div>
         </div>
 
         <div>
-          <h4
-            style={{
-              margin: "0 0 14px 0",
-              fontSize: "16px",
-              fontWeight: 700,
-              color: "#f4d38a",
-            }}
-          >
-            Contact Info
-          </h4>
-
+          <div className="eyebrow" style={{ marginBottom: "12px" }}>
+            Contact
+          </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
-              fontSize: "15px",
-              color: "rgba(255,255,255,0.85)",
-              lineHeight: "1.7",
+              gap: "9px",
+              fontSize: "14.5px",
+              color: "var(--sand)",
             }}
           >
-            <span>Corfu, Greece</span>
-            <span>+30  693 904 1035</span>
-            <span>office@marcopolocorfu.com</span>
+            <span>{CONTACT_INFO.address}</span>
+            <a
+              href={CONTACT_INFO.phoneHref}
+              style={{ color: "var(--ivory)", textDecoration: "none" }}
+            >
+              {CONTACT_INFO.phone}
+            </a>
+            <a
+              href={CONTACT_INFO.emailHref}
+              style={{ color: "var(--ivory)", textDecoration: "none" }}
+            >
+              {CONTACT_INFO.email}
+            </a>
           </div>
         </div>
 
         <div>
-          <h4
-            style={{
-              margin: "0 0 14px 0",
-              fontSize: "16px",
-              fontWeight: 700,
-              color: "#f4d38a",
-            }}
-          >
-            Why Stay With Us
-          </h4>
-
+          <div className="eyebrow" style={{ marginBottom: "12px" }}>
+            Booking &amp; Legal
+          </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
-              fontSize: "15px",
-              color: "rgba(255,255,255,0.85)",
-              lineHeight: "1.7",
+              gap: "9px",
+              fontSize: "14.5px",
             }}
           >
-            <span>Comfortable rooms</span>
-            <span>Friendly atmosphere</span>
-            <span>Convenient location</span>
-            <span>Great value for money</span>
+            <button
+              type="button"
+              onClick={() => openReserve()}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                color: "var(--ivory)",
+                textAlign: "left",
+                cursor: "pointer",
+                fontSize: "14.5px",
+              }}
+            >
+              Request Reservation ↗
+            </button>
+            <Link
+              href="/privacy"
+              style={{ color: "var(--sand)", textDecoration: "none" }}
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/cookies"
+              style={{ color: "var(--sand)", textDecoration: "none" }}
+            >
+              Cookie Policy
+            </Link>
           </div>
         </div>
       </div>
@@ -149,19 +177,22 @@ export default function Footer() {
       <div
         style={{
           maxWidth: "1300px",
-          margin: "26px auto 0 auto",
+          margin: "36px auto 0",
           paddingTop: "18px",
-          borderTop: "1px solid rgba(255,255,255,0.14)",
+          borderTop: "1px solid rgba(177,166,150,0.16)",
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "space-between",
           gap: "12px",
-          fontSize: "14px",
-          color: "rgba(255,255,255,0.72)",
+          fontSize: "12.5px",
+          color: "var(--sand-muted)",
         }}
       >
-        <span>© {new Date().getFullYear()} Marcopolo Hotel. All rights reserved.</span>
-        <span>Designed for easy bookings and a comfortable stay.</span>
+        <span>
+          © {new Date().getFullYear()} Marcopolo Hotel Corfu. All rights
+          reserved.
+        </span>
+        <span>Gouvia • Corfu Island • Greece</span>
       </div>
     </footer>
   );
