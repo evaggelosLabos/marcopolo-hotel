@@ -2,15 +2,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, phone, message, website, startedAt } = await req.json();
+    const { name, email, phone, message, website } = await req.json();
 
     // Honeypot: if filled, pretend success but do not send email
     if (website) {
-      return NextResponse.json({ success: true });
-    }
-
-    // Minimum time protection: block instant bot submissions
-    if (!startedAt || Date.now() - Number(startedAt) < 3000) {
       return NextResponse.json({ success: true });
     }
 
