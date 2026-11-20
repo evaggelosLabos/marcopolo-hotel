@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useCapsulesUI } from "./CapsulesContext";
 
 export default function Header() {
-  const { openReserve } = useCapsulesUI();
+  const { openReserve, toggleMenu, closeReserve } = useCapsulesUI();
+  const pathname = usePathname();
   const [clock, setClock] = useState("--:--");
 
   useEffect(() => {
@@ -44,6 +46,12 @@ export default function Header() {
     >
       <Link
         href="/"
+        aria-label="Marcopolo Hotel home"
+        onClick={() => {
+          toggleMenu(false);
+          closeReserve();
+          if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
         style={{
           pointerEvents: "auto",
           textDecoration: "none",

@@ -36,6 +36,7 @@ const ROUTE_LABELS: Record<string, string> = {
   "/rooms": "Rooms",
   "/location": "Location",
   "/about": "About",
+  "/why-marcopolo": "Why Marcopolo®",
   "/gallery": "Gallery",
   "/contact": "Contact",
   "/privacy": "Privacy Policy",

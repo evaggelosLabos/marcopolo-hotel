@@ -26,6 +26,7 @@ export type ExperienceItem = {
   title: string;
   description: string;
   image: string;
+  credit?: { author: string; source: string; license: string; licenseUrl: string };
 };
 
 export type GalleryPhoto = {
@@ -200,7 +201,8 @@ export const EXPERIENCES: ExperienceItem[] = [
     title: "Gouvia Beach & Marina",
     description:
       "5 minutes on foot from Marcopolo® — swim in sheltered Ionian waters and dine along the sailboat-lined promenade.",
-    image: "/hotel/photo_033.jpg",
+    image: "/experiences/gouvia-marina-sailboats.jpg",
+    credit: { author: "Liilia Moroz", source: "https://commons.wikimedia.org/wiki/File:Guvia_marina.jpg", license: "CC0 1.0", licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/" },
   },
   {
     num: "02 / 04",
@@ -208,15 +210,17 @@ export const EXPERIENCES: ExperienceItem[] = [
     title: "Corfu Venetian Old Town",
     description:
       "10 minutes by car to UNESCO cobblestone lanes, Liston cafés, and golden-hour views from the Old Fortress.",
-    image: "/hotel/photo_035.jpg",
+    image: "/experiences/corfu-liston.jpg",
+    credit: { author: "Hajotthu", source: "https://commons.wikimedia.org/wiki/File:Liston_Korfu.jpg", license: "CC BY-SA 3.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/" },
   },
   {
     num: "03 / 04",
-    pace: "On-Site",
-    title: "Poolside & Twilight Patio",
+    pace: "Half-Day",
+    title: "Vlacherna Monastery & Kanoni",
     description:
-      "Slow afternoons under white parasols followed by warm illuminated evenings beside the courtyard pool.",
-    image: "/hotel/photo_079.jpg",
+      "Visit the little white monastery on the water and take in the views from Corfu’s Kanoni peninsula.",
+    image: "/experiences/vlacherna-monastery.jpg",
+    credit: { author: "Jocelyn Erskine-Kellie", source: "https://commons.wikimedia.org/wiki/File:Vlacherna_Monastery,_Corfu.jpg", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/" },
   },
   {
     num: "04 / 04",
@@ -224,12 +228,13 @@ export const EXPERIENCES: ExperienceItem[] = [
     title: "Northern Coves & Paleokastritsa",
     description:
       "Gouvia sits at the ideal crossroads for day trips to emerald coves, hilltop monasteries, and Ionian boat charters.",
-    image: "/hotel/photo_041.jpg",
+    image: "/experiences/paleokastritsa-bay.jpg",
+    credit: { author: "Dr.K.", source: "https://commons.wikimedia.org/wiki/File:Palaiokastritsa_Bay_in_Corfu.jpg", license: "CC BY-SA 3.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/" },
   },
 ];
 
 export const GALLERY_CURATED: GalleryPhoto[] = [
-  { src: "/hotel/photo_008.jpg", title: "Marcopolo Hotel at Twilight" },
+  { src: "/enhanced/hotel-twilight.png", title: "Marcopolo Hotel at Twilight" },
   { src: "/hotel/photo_034.jpg", title: "Overhead Pool Courtyard" },
   { src: "/hotel/photo_079.jpg", title: "Illuminated Poolside Patio" },
   { src: "/hotel/photo_024.jpg", title: "Double Room — Morning Light" },
@@ -273,7 +278,7 @@ export const MENU_SECTIONS = [
     num: "01",
     label: "Welcome",
     href: "/#welcome",
-    img: "/hotel/photo_008.jpg",
+    img: "/enhanced/hotel-twilight.png",
     caption: "Meet Marcopolo® — sunlit Corfu stays, minutes from Gouvia Beach.",
   },
   {
@@ -304,8 +309,8 @@ export const MENU_SECTIONS = [
   {
     num: "05",
     label: "Why Marcopolo®",
-    href: "/#why",
-    routeHref: "/about",
+    href: "/why-marcopolo",
+    routeHref: "/why-marcopolo",
     img: "/hotel/photo_065.jpg",
     caption:
       "Pool courtyard, sunlit balconies, and welcoming morning breakfast lounge.",

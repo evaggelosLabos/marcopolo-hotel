@@ -50,10 +50,16 @@ export default function CapsulesHome() {
   const introLeftRef = useRef<HTMLDivElement>(null);
   const introRightRef = useRef<HTMLDivElement>(null);
   const chooseClipRef = useRef<HTMLDivElement>(null);
+  const roomRevealRef = useRef<HTMLDivElement>(null);
+  const roomRevealImageRef = useRef<HTMLDivElement>(null);
+  const roomRevealTextRef = useRef<HTMLDivElement>(null);
+  const roomRevealContentRef = useRef<HTMLDivElement>(null);
   const roomCardRefs = useRef<(HTMLElement | null)[]>([]);
   const roomImgRefs = useRef<(HTMLImageElement | null)[]>([]);
   const whyMarqueeRef = useRef<HTMLDivElement>(null);
   const ctaMarqueeRef = useRef<HTMLDivElement>(null);
+  const whyGridRef = useRef<HTMLDivElement>(null);
+  const whyMediaRef = useRef<HTMLDivElement>(null);
   const whyChapterRefs = useRef<(HTMLElement | null)[]>([]);
   const whyClip1Ref = useRef<HTMLDivElement>(null);
   const whyClip2Ref = useRef<HTMLDivElement>(null);
@@ -123,6 +129,30 @@ export default function CapsulesHome() {
     let lastDockLabel = "01 Welcome";
     let lastWhyIdx = 0;
     let lastExpStep = "01 / 04";
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileQuery = window.matchMedia("(max-width: 760px)");
+    const isStaticTrack = () => motionQuery.matches || mobileQuery.matches;
+    const trackDistance = (track: HTMLElement) =>
+      Math.max(0, track.scrollWidth - (track.parentElement?.clientWidth ?? 0));
+    const sizeRunways = () => {
+      [[expRunwayRef.current, expTrackRef.current]].forEach(([runway, track]) => {
+        if (!runway || !track) return;
+        if (isStaticTrack()) {
+          runway.style.height = "auto";
+          track.style.transform = "";
+        } else {
+          runway.style.height = `${window.innerHeight + trackDistance(track)}px`;
+        }
+      });
+    };
+    const resizeObserver = new ResizeObserver(sizeRunways);
+    [expTrackRef.current, galTrackRef.current].forEach((track) => {
+      if (track) resizeObserver.observe(track);
+    });
+    window.addEventListener("resize", sizeRunways);
+    motionQuery.addEventListener("change", sizeRunways);
+    mobileQuery.addEventListener("change", sizeRunways);
+    sizeRunways();
 
     const docTop = (el: HTMLElement) =>
       el.getBoundingClientRect().top + window.scrollY;
@@ -144,7 +174,7 @@ export default function CapsulesHome() {
       const rect = el.getBoundingClientRect();
       const p = clamp(
         (vh * startRatio - rect.top) /
-          (el.offsetHeight * 0.65 + vh * (startRatio - endRatio)),
+          (el.offsetHeight * 1.15 + vh * (startRatio - endRatio)),
         0,
         1
       );
@@ -169,7 +199,6 @@ export default function CapsulesHome() {
       prevY = y;
 
       const vh = window.innerHeight;
-      const vw = window.innerWidth;
       const docH = Math.max(1, document.documentElement.scrollHeight - vh);
 
       if (progressRef.current) {
@@ -179,7 +208,7 @@ export default function CapsulesHome() {
       // 1. Hero subtle zoom & parallax
       const hp = clamp(y / vh, 0, 1);
       if (heroImgRef.current) {
-        heroImgRef.current.style.transform = `scale(${(1 + hp * 0.12).toFixed(
+        heroImgRef.current.style.transform = `scale(${(1 + hp * 0.035).toFixed(
           4
         )}) translateY(${(-hp * 3.5).toFixed(2)}%)`;
       }
@@ -208,6 +237,24 @@ export default function CapsulesHome() {
             16,
             introP
           ).toFixed(1)}px)`;
+        }
+      }
+
+      // The first room grows from a centered image into a full-screen panel.
+      if (roomRevealRef.current && roomRevealImageRef.current) {
+        const p = runwayProgress(roomRevealRef.current, y);
+        const reveal = range(p, 0.04, 0.45);
+        const eased = reveal * reveal * (3 - 2 * reveal);
+        roomRevealImageRef.current.style.width = `${lerp(46, 98, eased)}%`;
+        roomRevealImageRef.current.style.height = `${lerp(49, 96, eased)}%`;
+        if (roomRevealContentRef.current) {
+          const contentProgress = range(p, 0.3, 0.4);
+          roomRevealContentRef.current.style.opacity = `${contentProgress}`;
+          roomRevealContentRef.current.style.visibility = contentProgress > 0.01 ? "visible" : "hidden";
+        }
+        if (roomRevealTextRef.current) {
+          roomRevealTextRef.current.style.transform = `translate3d(${lerp(8, -18, p)}%, 0, 0)`;
+          roomRevealTextRef.current.style.opacity = `${1 - range(p, 0.2, 0.5)}`;
         }
       }
 
@@ -281,16 +328,25 @@ export default function CapsulesHome() {
       const ch1 = whyChapterRefs.current[1];
       const ch2 = whyChapterRefs.current[2];
       if (ch1 && ch2) {
-        const wipe1 = clamp(
-          (vh * 0.88 - ch1.getBoundingClientRect().top) / (vh * 0.56),
-          0,
-          1
-        );
-        const wipe2 = clamp(
-          (vh * 0.88 - ch2.getBoundingClientRect().top) / (vh * 0.56),
-          0,
-          1
-        );
+        const grid = whyGridRef.current;
+        const chapterProgress = grid ? runwayProgress(grid, y) : 0;
+        const wipe1 = range(chapterProgress, 0.22, 0.43);
+        const wipe2 = range(chapterProgress, 0.66, 0.87);
+        if (whyMediaRef.current && window.innerWidth > 760 && !motionQuery.matches) {
+          const slide = range(chapterProgress, 0.22, 0.4) - range(chapterProgress, 0.64, 0.82);
+          whyMediaRef.current.style.transform = `translateX(calc(${-100 * slide}% - ${8 * slide}px))`;
+          const visibility = [1 - range(chapterProgress, 0.29, 0.42), range(chapterProgress, 0.27, 0.4) * (1 - range(chapterProgress, 0.71, 0.84)), range(chapterProgress, 0.69, 0.82)];
+          whyChapterRefs.current.forEach((chapter, index) => {
+            if (!chapter) return;
+            chapter.style.opacity = `${visibility[index]}`;
+            chapter.style.visibility = visibility[index] > 0.01 ? "visible" : "hidden";
+          });
+        } else {
+          if (whyMediaRef.current) whyMediaRef.current.style.transform = "";
+          whyChapterRefs.current.forEach((chapter) => {
+            if (chapter) { chapter.style.opacity = ""; chapter.style.visibility = ""; }
+          });
+        }
 
         if (whyClip1Ref.current) {
           whyClip1Ref.current.style.clipPath = `inset(${(
@@ -345,13 +401,9 @@ export default function CapsulesHome() {
         });
       }
 
-      const sidePad = Math.min(96, Math.max(32, vw * 0.07));
-      if (expRunwayRef.current && expTrackRef.current) {
+      if (!isStaticTrack() && expRunwayRef.current && expTrackRef.current) {
         const ep = runwayProgress(expRunwayRef.current, y);
-        const expMaxX = Math.max(
-          0,
-          expTrackRef.current.scrollWidth - (vw - sidePad)
-        );
+        const expMaxX = trackDistance(expTrackRef.current);
         expTrackRef.current.style.transform = `translate3d(${(
           -ep * expMaxX
         ).toFixed(1)}px, 0, 0)`;
@@ -360,18 +412,6 @@ export default function CapsulesHome() {
           lastExpStep = stepLabel;
           setExpStepText(stepLabel);
         }
-      }
-
-      // 7. Horizontal photo gallery glide
-      if (galRunwayRef.current && galTrackRef.current) {
-        const gp = runwayProgress(galRunwayRef.current, y);
-        const galMaxX = Math.max(
-          0,
-          galTrackRef.current.scrollWidth - (vw - sidePad)
-        );
-        galTrackRef.current.style.transform = `translate3d(${(
-          -gp * galMaxX
-        ).toFixed(1)}px, 0, 0)`;
       }
 
       // 8. Scroll-illuminated review words
@@ -403,7 +443,13 @@ export default function CapsulesHome() {
     };
 
     rafId = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(rafId);
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", sizeRunways);
+      motionQuery.removeEventListener("change", sizeRunways);
+      mobileQuery.removeEventListener("change", sizeRunways);
+    };
   }, [setDockLabel]);
 
   const currentReview = REVIEWS[reviewIdx];
@@ -464,6 +510,7 @@ export default function CapsulesHome() {
         style={{ padding: "12px clamp(10px, 1.6vw, 20px) 16px" }}
       >
         <div
+          className="home-hero-frame"
           style={{
             position: "relative",
             minHeight: "calc(100vh - 24px)",
@@ -481,7 +528,8 @@ export default function CapsulesHome() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             ref={heroImgRef}
-            src="/hotel/photo_008.jpg"
+            className="home-hero-photo"
+            src="/enhanced/hotel-twilight.png"
             alt="Marcopolo Hotel Corfu at twilight"
             style={{
               position: "absolute",
@@ -499,13 +547,14 @@ export default function CapsulesHome() {
               position: "absolute",
               inset: 0,
               background:
-                "linear-gradient(180deg, rgba(24,23,23,0.44) 0%, rgba(24,23,23,0.16) 46%, rgba(24,23,23,0.8) 100%)",
+                "linear-gradient(180deg, rgba(24,23,23,0.32) 0%, rgba(24,23,23,0.06) 46%, rgba(24,23,23,0.72) 100%)",
               zIndex: 2,
             }}
           />
 
           <div
             ref={heroCopyRef}
+            className="home-hero-copy"
             style={{
               position: "relative",
               zIndex: 3,
@@ -523,14 +572,12 @@ export default function CapsulesHome() {
               Gouvia • Corfu Island • Greece
             </div>
             <h1
-              className="display-xl"
+              className={`display-xl hero-title ${loaderDone ? "is-ready" : ""}`}
+              aria-label="Closer to Corfu — Closer to Yourself"
               style={{ margin: 0, color: "var(--ivory)" }}
             >
-              Closer to Corfu
-              <br />
-              <span style={{ color: "var(--sand)" }}>—</span> Closer to
-              <br />
-              Yourself
+              <span className="hero-title-line" aria-hidden="true"><span>Closer to Corfu</span></span>
+              <span className="hero-title-line" aria-hidden="true"><span><span className="hero-title-dash">—</span> Closer to Yourself</span></span>
             </h1>
           </div>
 
@@ -590,7 +637,7 @@ export default function CapsulesHome() {
 
           <div
             ref={introClipRef}
-            className="display-md"
+            className="display-md reference-intro"
             style={{ maxWidth: "1100px", marginBottom: "52px", fontWeight: 400 }}
           >
             {INTRO_LINES.map((line) => (
@@ -604,6 +651,7 @@ export default function CapsulesHome() {
           </div>
 
           <div
+            className="intro-images-row"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
@@ -613,6 +661,7 @@ export default function CapsulesHome() {
           >
             <div
               ref={introLeftRef}
+              className="intro-photo"
               style={{
                 borderRadius: "var(--radius-frame)",
                 overflow: "hidden",
@@ -636,6 +685,7 @@ export default function CapsulesHome() {
 
             <div
               ref={introRightRef}
+              className="intro-right"
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -704,19 +754,12 @@ export default function CapsulesHome() {
             padding: "0 clamp(16px, 4vw, 52px) 32px",
           }}
         >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "28px",
-              alignItems: "end",
-            }}
-          >
+          <div className="room-choose-layout">
             <div>
               <div className="eyebrow" style={{ marginBottom: "12px" }}>
                 (02) Discover Available Rooms
               </div>
-              <div ref={chooseClipRef} className="display-lg">
+              <div ref={chooseClipRef} className="display-lg reference-choose">
                 <div className="clip-line-wrap">
                   <span className="clip-line-base">Choose the one</span>
                   <span className="clip-line-fill" aria-hidden="true">
@@ -768,6 +811,30 @@ export default function CapsulesHome() {
           </div>
         </div>
 
+        <div ref={roomRevealRef} className="room-reveal-runway">
+          <div className="room-reveal-stage">
+            <div ref={roomRevealTextRef} className="room-reveal-marquee">
+              Marcopolo® &nbsp; Marcopolo® &nbsp; Marcopolo®
+            </div>
+            <div ref={roomRevealImageRef} className="room-reveal-image">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={ROOMS[0].image} alt={ROOMS[0].title} />
+              <div ref={roomRevealContentRef} className="room-reveal-content" style={{ opacity: 0, visibility: "hidden" }}>
+                <h3>{ROOMS[0].title}<sup>®</sup></h3>
+                <span className="room-reveal-scroll">(Scroll)</span>
+                <div className="room-reveal-bottom">
+                  <button type="button" className="cap-pill" onClick={() => setSelectedRoom(ROOMS[0])}>
+                    <span>Details</span><span className="cap-circle">+</span>
+                  </button>
+                  <p>{ROOMS[0].shortDesc}</p>
+                  <button type="button" className="cap-pill" onClick={() => openReserve(ROOMS[0].reserveLabel)}>
+                    <span>Reserve</span><span className="cap-circle">↗</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="room-stack-wrap">
           {ROOMS.map((room, idx) => (
             <article
@@ -883,6 +950,7 @@ export default function CapsulesHome() {
       >
         <div style={{ maxWidth: "1300px", margin: "0 auto" }}>
           <div
+            className="location-intro"
             style={{
               textAlign: "center",
               maxWidth: "800px",
@@ -1133,7 +1201,7 @@ export default function CapsulesHome() {
 
       {/* 05A. SCROLL-DIRECTION-REACTIVE MARQUEE */}
       <section style={{ padding: "16px 0 8px" }}>
-        <div className="dir-marquee-wrap">
+        <Link href="/why-marcopolo" className="dir-marquee-wrap why-marquee-link" aria-label="Explore why guests choose Marcopolo">
           <div ref={whyMarqueeRef} className="dir-marquee-track">
             {[0, 1, 2, 3].map((idx) => (
               <span
@@ -1150,12 +1218,12 @@ export default function CapsulesHome() {
               </span>
             ))}
           </div>
-        </div>
+        </Link>
       </section>
 
       {/* 05B. 3-CHAPTER EDITORIAL SPLIT + STICKY CLIP-WIPING PHOTO STAGE */}
       <section id="why" data-section="05 Why Marcopolo®">
-        <div className="why-editorial-grid">
+        <div ref={whyGridRef} className="why-editorial-grid">
           <div className="why-chapters-col">
             {WHY_CHAPTERS.map((ch, idx) => (
               <article
@@ -1230,7 +1298,7 @@ export default function CapsulesHome() {
             ))}
           </div>
 
-          <div className="why-sticky-media">
+          <div ref={whyMediaRef} className="why-sticky-media">
             <div className="why-photo-layer" style={{ zIndex: 1 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -1423,7 +1491,6 @@ export default function CapsulesHome() {
         ref={expRunwayRef}
         data-section="06 Experiences"
         className="h-pin-runway"
-        style={{ height: "200vh" }}
       >
         <div className="h-pin-stage">
           <div
@@ -1438,7 +1505,7 @@ export default function CapsulesHome() {
             }}
           >
             <span className="eyebrow">
-              Scroll glides experiences horizontally →
+              Explore experiences →
             </span>
             <span
               style={{
@@ -1472,7 +1539,7 @@ export default function CapsulesHome() {
                       position: "absolute",
                       inset: 0,
                       background:
-                        "linear-gradient(180deg, rgba(24,23,23,0.18), rgba(24,23,23,0.86))",
+                        "linear-gradient(180deg, transparent 45%, rgba(24,23,23,0.12) 65%, rgba(24,23,23,0.76) 100%)",
                     }}
                   />
                   <div
@@ -1522,102 +1589,14 @@ export default function CapsulesHome() {
                       >
                         {exp.description}
                       </p>
+                      {exp.credit && (
+                        <p style={{ margin: "10px 0 0", fontSize: "11px", color: "rgba(255,255,255,.85)" }}>
+                          Photo: <a href={exp.credit.source} target="_blank" rel="noreferrer" style={{ color: "inherit" }}>{exp.credit.author}</a> · <a href={exp.credit.licenseUrl} target="_blank" rel="noreferrer" style={{ color: "inherit" }}>{exp.credit.license}</a> · resized and cropped
+                        </p>
+                      )}
                     </div>
                   </div>
                 </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 07. PINNED 1:1 HORIZONTAL PHOTO GALLERY */}
-      <section
-        id="gallery"
-        ref={galRunwayRef}
-        data-section="07 Gallery"
-        className="h-pin-runway"
-        style={{ height: "240vh" }}
-      >
-        <div className="h-pin-stage">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              gap: "14px",
-              marginBottom: "18px",
-              maxWidth: "1300px",
-              width: "100%",
-              marginInline: "auto",
-              flexWrap: "wrap",
-            }}
-          >
-            <div>
-              <div className="eyebrow" style={{ marginBottom: "6px" }}>
-                (05) Horizontal Gallery
-              </div>
-              <h2 className="display-md" style={{ margin: 0 }}>
-                Inside Marcopolo
-                <sup style={{ fontSize: "0.45em", color: "var(--sand)" }}>®</sup>
-              </h2>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-              <span style={{ fontSize: "12.5px", color: "var(--sand)" }}>
-                Click any photo to expand
-              </span>
-              <Link href="/gallery" className="cap-pill-ghost">
-                All 74 photos →
-              </Link>
-            </div>
-          </div>
-
-          <div style={{ width: "100%" }}>
-            <div ref={galTrackRef} className="h-scrub-track">
-              {GALLERY_CURATED.map((photo, idx) => (
-                <button
-                  key={photo.src}
-                  type="button"
-                  className="gal-scrub-card"
-                  onClick={() => setLightboxIdx(idx)}
-                  style={{ padding: 0, textAlign: "left" }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photo.src} alt={photo.title} draggable={false} />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      padding: "36px 18px 16px",
-                      background:
-                        "linear-gradient(180deg, transparent, rgba(24,23,23,0.86))",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "13.5px",
-                        color: "var(--ivory)",
-                        fontWeight: 500,
-                      }}
-                    >
-                      {photo.title}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        color: "var(--sand)",
-                        fontVariantNumeric: "tabular-nums",
-                      }}
-                    >
-                      {String(idx + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                </button>
               ))}
             </div>
           </div>
@@ -1744,6 +1723,104 @@ export default function CapsulesHome() {
               >
                 →
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="closing-image" aria-label="Marcopolo Hotel in Corfu">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/enhanced/hotel-twilight.png" alt="Marcopolo Hotel in Corfu" />
+        <div className="closing-image-copy">Closer to Corfu<br />—Closer to Yourself</div>
+      </section>
+
+      {/* 07. PINNED 1:1 HORIZONTAL PHOTO GALLERY */}
+      <section
+        id="gallery"
+        ref={galRunwayRef}
+        data-section="07 Gallery"
+        className="h-pin-runway"
+      >
+        <div className="h-pin-stage">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              gap: "14px",
+              marginBottom: "18px",
+              maxWidth: "1300px",
+              width: "100%",
+              marginInline: "auto",
+              flexWrap: "wrap",
+            }}
+          >
+            <div>
+              <div className="eyebrow" style={{ marginBottom: "6px" }}>
+                (05) Horizontal Gallery
+              </div>
+              <h2 className="display-md" style={{ margin: 0 }}>
+                Inside Marcopolo
+                <sup style={{ fontSize: "0.45em", color: "var(--sand)" }}>®</sup>
+              </h2>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+              <span style={{ fontSize: "12.5px", color: "var(--sand)" }}>
+                Click any photo to expand
+              </span>
+              <Link href="/gallery" className="cap-pill-ghost">
+                All 74 photos →
+              </Link>
+            </div>
+          </div>
+
+          <div style={{ width: "100%" }}>
+            <div ref={galTrackRef} className="h-scrub-track">
+              {GALLERY_CURATED.map((photo, idx) => (
+                <button
+                  key={photo.src}
+                  type="button"
+                  className="gal-scrub-card"
+                  onClick={() => setLightboxIdx(idx)}
+                  style={{ padding: 0, textAlign: "left" }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={photo.src} alt={photo.title} draggable={false} />
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      padding: "36px 18px 16px",
+                      background:
+                        "linear-gradient(180deg, transparent, rgba(24,23,23,0.86))",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "13.5px",
+                        color: "var(--ivory)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {photo.title}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        color: "var(--sand)",
+                        fontVariantNumeric: "tabular-nums",
+                      }}
+                    >
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         </div>

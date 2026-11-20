@@ -10,7 +10,7 @@ export default function GalleryPage() {
     .filter((file) =>
       /\.(jpg|jpeg|png|webp|avif)$/i.test(file)
     )
-    .map((file) => `/hotel/${file}`);
+    .map((file) => file === "photo_008.jpg" ? "/enhanced/hotel-twilight.png" : `/hotel/${file}`);
 
   return <GalleryClient images={images} />;
 }

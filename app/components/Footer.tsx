@@ -26,8 +26,13 @@ export default function Footer() {
         }}
       >
         <div>
-          <div
+          <Link
+            href="/"
+            onClick={() => { if (window.location.pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" }); }}
             style={{
+              display: "inline-block",
+              color: "inherit",
+              textDecoration: "none",
               fontSize: "26px",
               fontWeight: 600,
               letterSpacing: "-0.03em",
@@ -36,7 +41,7 @@ export default function Footer() {
           >
             Marcopolo
             <sup style={{ fontSize: "12px", color: "var(--sand)" }}>®</sup>
-          </div>
+          </Link>
           <p
             style={{
               margin: 0,
@@ -194,6 +199,7 @@ export default function Footer() {
         </span>
         <span>Gouvia • Corfu Island • Greece</span>
       </div>
+      <div aria-hidden="true" className="footer-wordmark">Marcopolo<sup>®</sup></div>
     </footer>
   );
 }

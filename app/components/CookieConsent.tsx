@@ -30,6 +30,7 @@ export default function CookieConsent() {
 
   return (
     <div
+      className="cookie-banner"
       style={{
         position: "fixed",
         left: "50%",

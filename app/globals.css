@@ -395,8 +395,9 @@ body {
 }
 
 .exp-scrub-card {
-  flex: 0 0 clamp(290px, 64vw, 680px);
-  height: clamp(320px, 56vh, 470px);
+  flex: 0 0 min(82vw, 1180px);
+  height: min(72vh, 720px);
+  min-height: 320px;
   border-radius: var(--radius-frame);
   overflow: hidden;
   position: relative;
