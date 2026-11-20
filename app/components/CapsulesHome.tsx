@@ -1589,11 +1589,6 @@ export default function CapsulesHome() {
                       >
                         {exp.description}
                       </p>
-                      {exp.credit && (
-                        <p style={{ margin: "10px 0 0", fontSize: "11px", color: "rgba(255,255,255,.85)" }}>
-                          Photo: <a href={exp.credit.source} target="_blank" rel="noreferrer" style={{ color: "inherit" }}>{exp.credit.author}</a> · <a href={exp.credit.licenseUrl} target="_blank" rel="noreferrer" style={{ color: "inherit" }}>{exp.credit.license}</a> · resized and cropped
-                        </p>
-                      )}
                     </div>
                   </div>
                 </article>
